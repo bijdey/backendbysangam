@@ -1,0 +1,45 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Dependency directories
+node_modules/
+vendor/
+.venv/
+venv/
+env/
+
+# Build outputs
+build/
+dist/
+*.exe
+*.dll
+*.out
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# Environment files
+.env
+.env.local
+.env*.local
+
+# Temporary files
+*.tmp
+*.temp
+
+# Compiled files (adjust for your language)
+*.class          # Java
+*.py[co]         # Python
+__pycache__/
