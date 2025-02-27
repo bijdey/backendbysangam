@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-// sync way
+// sync way of writing code
 //create a folder in same directory
 const dataFolder = path.join(__dirname, 'data');
 
@@ -29,5 +29,42 @@ console.log('File content:', readcontent2);
 
 
 
-//async way
+
+
+//async way of writing code
+
+const asyncFilePath =path.join(dataFolder, 'asyncdata.txt');
+fs.writeFile(asyncFilePath, 'Hello world from Node.js from async', (err) => {
+    if (err) {
+        console.log('Error:', err);
+    } else {
+        console.log('Data written to file');
+
+        fs.readFile(asyncFilePath, 'utf-8', (err, data) => {
+            if (err) {
+                console.log('Error:', err);
+            } else {
+                console.log('Async file content:', data);
+
+                fs.appendFile(asyncFilePath, '\nAdded new line', (err) => {
+                    if (err) {
+                        console.log('Error:', err);
+                    } else {
+                        console.log('New line added to asyncfile');
+
+                        // Read the file again to display the updated content
+                        fs.readFile(asyncFilePath, 'utf-8', (err, updatedData) => {
+                            if (err) {
+                                console.log('Error:', err);
+                            } else {
+                                console.log('Async file with added content:', updatedData);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+});
+
 

@@ -1,0 +1,2 @@
+Hello world from Node.js from async
+Added new line
