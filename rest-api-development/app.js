@@ -57,8 +57,9 @@ app.post('/add',(req,res)=>{
 app.put('/update/:id',(req,res)=>{
     const findCurrentBook= books.find(bookItem=>bookItem.id === req.params.id)
     if(findCurrentBook){    
-        find
+        find.out(findCurrentBook)
     }
 })
-//
+//// 
 app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+console.log();
