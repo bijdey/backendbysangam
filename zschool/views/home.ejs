@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Marks Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="number"] {
+      padding: 8px;
+      width: 100%;
+    }
+    button {
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📄 Student Report Entry</h2>
+
+  <form action="/submit-marks" method="POST">
+    <div>
+      <label for="studentName">Student Name:</label>
+      <input type="text" id="studentName" name="studentName" required>
+    </div>
+
+     <div>
+      <label for="classTeacher">Class Teacher Name:</label>
+      <input type="text" id="classTeacher" name="classTeacher" required>
+    </div>
+
+    <div>
+      <label for="rollNumber">Roll Number:</label>
+      <input type="text" id="rollNumber" name="rollNumber" required>
+    </div>
+
+   
+
+    <div>
+      <label for="maths">Mathematics Marks:</label>
+      <input type="number" id="maths" name="marks[mathematics]" min="0" max="100" required>
+    </div>
+
+    <div>
+      <label for="english">English Marks:</label>
+      <input type="number" id="english" name="marks[english]" min="0" max="100" required>
+    </div>
+
+    <div>
+      <label for="hindi">Hindi Marks:</label>
+      <input type="number" id="hindi" name="marks[hindi]" min="0" max="100" required>
+    </div>
+
+    <div>
+      <label for="sanskrit">Sanskrit Marks:</label>
+      <input type="number" id="sanskrit" name="marks[sanskrit]" min="0" max="100" required>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+
+</body>
+</html>
