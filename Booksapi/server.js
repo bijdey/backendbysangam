@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const express= require('express')
 const dataBase= require('./database/db')
+const bookRoutes= require('./routes/book-routes')
 
 
 const app=express()
@@ -14,6 +15,11 @@ dataBase()
 app.use(express.json())
 
 
+//routes
+app.use('/api/books', bookRoutes) // this is the parent route
+//it will work like this example-  '/api/books/delete'
+
+
 
 
 
@@ -21,3 +27,6 @@ app.use(express.json())
 app.listen(port, () => {
   console.log('Server running on http://localhost:3000');
 });
+
+
+//411
