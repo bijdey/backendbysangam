@@ -6,7 +6,7 @@ const getAllBooks = async (req, res) => {
     const allBooks = await Book.find({});
     
     if (allBooks?.length > 0) {
-      res.status(200).json({
+      res.status(200).json({ 
         success: true,
         message: 'List of all the books fetched successfully',
         data: allBooks
@@ -31,7 +31,17 @@ const getAllBooks = async (req, res) => {
 
 const getSingleBookById = async (req, res) => {
   try {
-   
+    const getCurrentBookId= req.params.id;
+    const bookDetailsById= await Book.findById(getCurrentBookId)
+    if(!bookDetailsById){
+      return res.status(404).json({
+        success: false,
+        message: 'Book with the given id is not found'
+      })
+    } res.status(200).json({
+      success: true,
+      data: bookDetailsById
+    })
 
   } catch (e) {
     console.error('Error in getSingleBookById:', e);
@@ -68,9 +78,34 @@ const updateBook= async(req,res)=>{
 }
 
 
-const deleteBook= async(req,res)=>{
+const deleteBook = async (req, res) => {
+  try {
+    const getCurrentBookId = req.params.id;
+    const deletedBook = await Book.findByIdAndDelete(getCurrentBookId);
 
-}
+    if (!deletedBook) {
+      res.status(404).json({
+        success: false,
+        message: 'Book not found with this ID. Unable to delete.'
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'Book with the specified ID has been deleted.',
+        data: deletedBook
+      });
+    }
+
+  } catch (e) {
+    console.error('Error found at deleteBook:', e);
+    res.status(500).json({
+      success: false,
+      message: 'Unable to delete the book. Something went wrong.',
+      error: e.message
+    });
+  }
+};
+
 
 module.exports={getAllBooks, getSingleBookById, addNewBook, updateBook, deleteBook}
 
