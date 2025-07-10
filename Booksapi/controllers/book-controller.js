@@ -74,6 +74,18 @@ const addNewBook = async (req, res) => {
 
 
 const updateBook= async(req,res)=>{
+  try {
+    const updatedBook= req.body
+    
+  } catch (e) {
+    console.error('error found at the update book', e)
+    res.status(500).json({
+      success: false,
+      message: 'Unable to update the book. Something went wrong.',
+      error: e.message
+    });
+    
+  }
 
 }
 
