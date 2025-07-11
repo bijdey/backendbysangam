@@ -8,8 +8,14 @@ const port= process.env.port || 5000
 //database connection
 const ConnectToDatabase = require('./database/db');
 ConnectToDatabase();
+
+
+//Middlewares
+app.use(express.json())
   
 app.use('api/auth', authRoutes)
+
+
 
 
 
