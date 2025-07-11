@@ -24,7 +24,7 @@ const getAllBooks = async (req, res) => {
       success: false,
       message: 'Internal Server Error',
       error: e.message
-    });
+    }); 
   }
 };
 
@@ -62,6 +62,7 @@ const addNewBook = async (req, res) => {
         message: "Book added successfully",
         data: newlyCreatedBook,
       });
+      
     }
   } catch (e) {
     console.error('error at addNewBook', e);
@@ -75,7 +76,25 @@ const addNewBook = async (req, res) => {
 
 const updateBook= async(req,res)=>{
   try {
-    const updatedBook= req.body
+    const updatedBookFormData= req.body
+    const getCurrentBookId= req.params.id
+    const updatedBook= await Book.findByIdAndUpdate(getCurrentBookId, updatedBookFormData,{
+      new: true
+    });
+   if(!updatedBook){
+    res.status(404).json({
+      success: false,
+      message: "Bookis  not found unable to update the book"
+    })
+   } else{
+    res.status(200).json({
+      success: true,
+      message: 'book updated',
+      data: updatedBook
+  
+    })
+   }
+   
     
   } catch (e) {
     console.error('error found at the update book', e)
