@@ -8,10 +8,13 @@ const registerUser = async (req, res) => {
   try {
     const { username, email, password, role } = req.body;
 
+      console.log('data comming from postman', req.body)
     // Check if user already exists
     const checkExistingUser = await User.findOne({
       $or: [{ username }, { email }]
     });
+
+    console.log('already exist', checkExistingUser)
 
     if (checkExistingUser) {
       return res.status(400).json({
@@ -20,9 +23,11 @@ const registerUser = async (req, res) => {
       });
     }
 
+    
+
     // Hash user password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt); // ✅ fixed
+    const hashedPassword = await bcrypt.hash(password, salt); 
 
     // Create user and save in the database
     const newlyCreatedUser = new User({
@@ -32,7 +37,10 @@ const registerUser = async (req, res) => {
       role: role || 'user'
     });
 
+
+    //saveinbackend
     await newlyCreatedUser.save(); // Save first
+    console.log('newlycreateduser', newlyCreatedUser)
 
     if (newlyCreatedUser) {
       return res.status(201).json({
@@ -55,6 +63,9 @@ const registerUser = async (req, res) => {
     });
   }
 };
+
+
+
 
 
 //login user
