@@ -1,6 +1,7 @@
 const Image = require('../models/Image');
 const { uploadToCloudinary } = require('../helpers/cloudinaryHelper');
 const fs= require('fs')
+const cloudinary= require('../config/cloudinary')
 
 const uploadImageController = async (req, res) => {
   try {
@@ -67,9 +68,58 @@ const fetchImageController= async(req,res)=>{
 
 }
 
+const deleteImageController = async (req, res) => {
+  try {
+    const getCurrentIDofImageToBeDeleted = req.params.id;
+    const userId = req.userInfo.userId;
+
+    // Find the image (even if not owned by current user)
+    const image = await Image.findById(getCurrentIDofImageToBeDeleted);
+
+    if (!image) {
+      return res.status(404).json({
+        success: false,
+        message: 'Image not found in the database',
+      });
+    }
+
+    // Check ownership before deletion
+    if (image.uploadedBy.toString() !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: 'You are not authorized to delete this image as you did not upload it',
+      });
+    }
+
+    // ✅ Delete from Cloudinary
+    await cloudinary.uploader.destroy(image.publicId);
+
+    // ✅ Delete from MongoDB
+    await Image.findByIdAndDelete(getCurrentIDofImageToBeDeleted);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Image deleted successfully',
+    });
+
+  } catch (error) {
+    console.error('❌ Error in deleteImageController:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Unable to delete the image. Please try again later.',
+    });
+  }
+};
+
+
+
+
+
+//68779f509e9319f84e68387b
 
 module.exports= { 
     uploadImageController,
-    fetchImageController
+    fetchImageController,
+    deleteImageController
 
 }
