@@ -6,7 +6,7 @@ const { uploadImageController, fetchImageController } = require('../controllers/
 
 const router = express.Router();
 
-// Upload the image
+// Upload the image/
 router.post('/upload', authMiddleware, adminMiddleware, uploadMiddleware.single('image'), uploadImageController);
 router.get('/getimage', authMiddleware, fetchImageController)
 
