@@ -11,4 +11,4 @@ router.post('/upload', authMiddleware, adminMiddleware, uploadMiddleware.single(
 router.get('/getimage', authMiddleware, fetchImageController)
 
 // To get all the images (optional route, add if needed)
-module.exports = router;
+module.exports = router
