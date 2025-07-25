@@ -44,29 +44,40 @@ const uploadImageController = async (req, res) => {
 };
 
 
-//fetch the image
+//fetch the image it also includes pagination
 
-const fetchImageController= async(req,res)=>{
+const fetchImageController = async (req, res) => {
   try {
-    const images= await Image.find({})
-    if(images){
-      res.status(200).json({
-        success: true,
-        data: images
+    const page = parseInt(req.query.page) || 1;  // current page number
+    const limit = parseInt(req.query.limit) || 5;  // items per page
+    const skip = (page - 1) * limit;
 
-      })
-    }
-    
+    const sortBy = req.query.sortBy || 'createdAt';
+    const sortOrder = req.query.sortOrder === 'asc' ? 1 : -1;
+    const sortObj = { [sortBy]: sortOrder };
+
+    const totalImages = await Image.countDocuments();
+    const totalPages = Math.ceil(totalImages / limit);
+
+    const images = await Image.find().sort(sortObj).skip(skip).limit(limit);
+
+    res.status(200).json({
+      success: true,
+      currentPage: page,
+      totalPages: totalPages,
+      totalImages: totalImages,
+      data: images
+    });
+
   } catch (error) {
-    console.error('error in fetchImagecontroller', error)
+    console.error('Error in fetchImageController:', error);
     res.status(500).json({
       success: false,
-      message: 'something went wrong in fetching the images please try again'
-    })
-    
+      message: 'Something went wrong while fetching the images. Please try again.'
+    });
   }
+};
 
-}
 
 const deleteImageController = async (req, res) => {
   try {
@@ -75,6 +86,7 @@ const deleteImageController = async (req, res) => {
 
     // Find the image (even if not owned by current user)
     const image = await Image.findById(getCurrentIDofImageToBeDeleted);
+    console.log(image)
 
     if (!image) {
       return res.status(404).json({

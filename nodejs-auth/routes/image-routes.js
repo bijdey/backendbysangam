@@ -15,5 +15,7 @@ router.get('/getimage', authMiddleware, fetchImageController)
 //delete image route
 router.delete('/:id', authMiddleware, adminMiddleware, deleteImageController )
 
+
 // To get all the images (optional route, add if needed)
 module.exports = router
+
