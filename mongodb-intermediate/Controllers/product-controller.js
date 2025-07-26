@@ -46,32 +46,34 @@ const getProductStats = async (req, res) => {
 };
 
 
-const getProductAnalysis= async(req,res)=>{
+const getProductAnalysis = async (req, res) => {
     try {
         const result = await Product.aggregate([
-         {
-             $match: { category: "Electronics" }
-         },
-         //
-         {
-            $group:{
-                _id: null,
-                totalRevenue: {
-                    $sum: "$price"
-                },
-                averagePrice:{
-                    $avg: "$price"
-                },
-                maxProductPrice:{
-                    $max: "$price"
-                },
-                minProductPrice:{
-                    $min: "$price"
-                },
-                
+            {
+                $match: { category: "Electronics" }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalRevenue: { $sum: "$price" },
+                    averagePrice: { $avg: "$price" },
+                    maxProductPrice: { $max: "$price" },
+                    minProductPrice: { $min: "$price" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    totalRevenue: 1,
+                    averagePrice: 1,
+                    maxProductPrice: 1,
+                    minProductPrice: 1,
+                    priceRange: {
+                        $subtract: ["$maxProductPrice", "$minProductPrice"]
+                    }
+                }
             }
-         }
-    ]);
+        ]);
     
     res.status(200).json({
         success: true,
