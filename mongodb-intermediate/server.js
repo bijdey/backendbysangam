@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 //get the routes
 const productRoutes= require('./routes/product-routes')
+const bookRoutes= require('./routes/book-routes')
 //Get the port from .env or default to 3000
 const PORT = process.env.PORT || 5000;
 
@@ -25,6 +26,7 @@ connectDB();
 //Use middleware
 app.use(express.json());
 app.use('/products', productRoutes)
+app.use('/refrence', bookRoutes)
 
 
 
