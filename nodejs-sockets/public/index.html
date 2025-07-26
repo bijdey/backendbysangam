@@ -1,29 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat-App</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat-App</title>
 </head>
 <body>
 
-    <div id="user-list">
-        <h3>Online User</h3>
-        <ul id="users">
+  <div id="user-list">
+    <h3>Online Users</h3>
+    <ul id="users"></ul>
+  </div>
 
-        </ul>
-    </div>
+  <div id="chat"></div>
 
-    <div id="chat">
+  <form id="message-form">
+    <input type="text" id="message-input" placeholder="Enter your message" />
+    <button type="submit">Send</button>
+  </form>
 
-    </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
 
-    <form id="message-form" action="" type="text" id="message-input" 
-        placeholder="Enter your message">
-    <button type="submit"></button></form>
+    const chat = document.getElementById('chat');
+    const userList = document.getElementById('users');
+    const messageForm = document.getElementById('message-form');
+    const messageInput = document.getElementById('message-input');
 
+    const userName = prompt('Enter your username');
+    socket.emit('join', userName);
 
+    socket.on('userJoined', (user) => {
+      addMessage(`${user} has joined the chat`);
+    });
 
-    
+    socket.on('userList', (users) => {
+      userList.innerHTML = '';
+      users.forEach(user => {
+        const li = document.createElement('li');
+        li.textContent = user;
+        userList.appendChild(li);
+      });
+    });
+
+    function addMessage(input) {
+      const messageElement = document.createElement('div');
+      messageElement.textContent = input;
+      chat.appendChild(messageElement);
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+
 </body>
 </html>
