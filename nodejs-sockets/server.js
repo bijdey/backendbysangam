@@ -20,14 +20,14 @@ const users = new Set();
 io.on("connection", (socket) => {
   console.log('A user is now connected');
 
-  // Handle when a user joins the chat
+  // Handle when a user joins the chat (there is also a code in the frotend, with the event 'join')
   socket.on('join', (userName) => {
-    users.add(userName);
+    users.add(userName);    //added the new user in the users list
 
-    // Notify everyone a user joined
+    // Notify everyone a user joined when new user joins, done from the server side (broadcasting that new user has joined)
     io.emit('userJoined', userName);
 
-    // Send updated user list to all clients
+    // Send updated user list to all clients (users)
     io.emit('userList', Array.from(users));
   });
 });

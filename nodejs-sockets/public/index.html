@@ -23,18 +23,25 @@
   <script>
     const socket = io();
 
-    const chat = document.getElementById('chat');
-    const userList = document.getElementById('users');
-    const messageForm = document.getElementById('message-form');
-    const messageInput = document.getElementById('message-input');
+const [chat,  userList, messageForm, messageInput] = [
+           document.getElementById('chat'),
+           document.getElementById('users'),
+           document.getElementById('message-form'),
+           document.getElementById('message-input')
+        ];
 
     const userName = prompt('Enter your username');
+
+    //emmiting the event that someone has joined
+      //the userName will be sent to the backend
     socket.emit('join', userName);
 
+    //userJoined data is comming from the server
     socket.on('userJoined', (user) => {
       addMessage(`${user} has joined the chat`);
     });
 
+    //usereList data is comming from the server
     socket.on('userList', (users) => {
       userList.innerHTML = '';
       users.forEach(user => {
@@ -48,6 +55,8 @@
       const messageElement = document.createElement('div');
       messageElement.textContent = input;
       chat.appendChild(messageElement);
+
+      //scroll to the bottom of the chat container
       chat.scrollTop = chat.scrollHeight;
     }
   </script>
