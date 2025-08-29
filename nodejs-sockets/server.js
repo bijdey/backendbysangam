@@ -23,6 +23,7 @@ io.on("connection", (socket) => {
   // Handle when a user joins the chat (there is also a code in the frotend, with the event 'join')
   socket.on('join', (userName) => {
     users.add(userName);    //added the new user in the users list
+    socket.userName= userName;
 
     // Notify everyone a user joined when new user joins, done from the server side (broadcasting that new user has joined)
     io.emit('userJoined', userName);
@@ -30,6 +31,29 @@ io.on("connection", (socket) => {
     // Send updated user list to all clients (users)
     io.emit('userList', Array.from(users));
   });
+
+  //handle the incoming chat message
+  socket.on('chatMessage', (message)=>{
+    //broadcast the received message to all the connected clients
+
+    io.emit('chatMessage', message)
+  })
+
+  //handle the user disconnection
+  socket.on('disconnect', () => {
+  console.log('a user is disconnected');  
+  users.forEach((user) => {
+    if (user === socket.userName) {       
+      users.delete(user);
+      io.emit('userLeft', user);     
+      
+      //updated user list broadcast
+      io.emit('userList', Array.from(users))
+    }
+  });
+});
+
+
 });
 
 server.listen(port, () => {

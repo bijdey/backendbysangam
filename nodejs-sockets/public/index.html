@@ -41,11 +41,33 @@ const [chat,  userList, messageForm, messageInput] = [
      addMessage(`${new Date().toLocaleTimeString()} - ${user} has joined the chat`);
     });
 
+
+    //user left the chart
+    socket.on('userLeft', (user)=>{
+      addMessage(`${user}has left the chart`)
+    })
+
+
     //usereList data is comming from the server
     socket.on("userList", (users)=>{
       userList.innerHTML= users.map(user=> `<li>${user}`).join(' ')
     })
+    //listen for the chatmessage events from the server
+    socket.on('chatMessage', (message)=>{
+      addMessage(`${message.userName}: ${message.text}`)
+    })
 
+
+    //handle the  form submition
+    messageForm.addEventListener('submit', (event)=>{
+      event.preventDefault();
+
+      const extractMessageText= messageInput.value.trim()
+      if(extractMessageText){
+        socket.emit('chatMessage', {userName, text: extractMessageText})
+        messageInput.value= ''
+      }
+    })
     function addMessage(input) {
       const messageElement = document.createElement('div');
       messageElement.textContent = input;
