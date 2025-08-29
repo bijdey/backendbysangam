@@ -38,18 +38,13 @@ const [chat,  userList, messageForm, messageInput] = [
 
     //userJoined data is comming from the server
     socket.on('userJoined', (user) => {
-      addMessage(`${user} has joined the chat`);
+     addMessage(`${new Date().toLocaleTimeString()} - ${user} has joined the chat`);
     });
 
     //usereList data is comming from the server
-    socket.on('userList', (users) => {
-      userList.innerHTML = '';
-      users.forEach(user => {
-        const li = document.createElement('li');
-        li.textContent = user;
-        userList.appendChild(li);
-      });
-    });
+    socket.on("userList", (users)=>{
+      userList.innerHTML= users.map(user=> `<li>${user}`).join(' ')
+    })
 
     function addMessage(input) {
       const messageElement = document.createElement('div');
